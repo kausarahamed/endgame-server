@@ -14,16 +14,11 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-// client.connect((err) => {
-//   const collection = client.db("test").collection("devices");
-//   // perform actions on the collection object
-//   client.close();
-// });
 
 async function run() {
   try {
     await client.connect();
-    const taskCollection = client.db("todo-app").collection("task");
+    const taskCollection = client.db("keep").collection("task");
 
     app.get("/task", async (req, res) => {
       const query = { completed: false };
@@ -70,6 +65,7 @@ async function run() {
 
     app.post("/task", async (req, res) => {
       const doc = req.body;
+      console.log(doc);
       const result = await taskCollection.insertOne(doc);
       res.send(result);
     });
@@ -80,7 +76,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("welcome to todo-app");
+  res.send("welcome to keep");
 });
 
 app.listen(port, () => {
